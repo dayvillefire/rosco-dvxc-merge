@@ -85,14 +85,17 @@ func main() {
 			log.Printf("Combining %s + %s -> %s", frontMp4, rearMp4, dualMp4)
 			args := []string{
 				"-i", frontMp4, "-i", rearMp4,
-				"-filter_complex", `"[0:v][1:v]hstack=inputs=2[v];[0:a][1:a]amerge[a]"`,
-				"-map", `"[v]"`, "-map", `"[a]"`,
+				"-filter_complex", "[0:v][1:v]hstack=inputs=2[v];[0:a][1:a]amerge[a]",
+				"-map", "[v]", "-map", "[a]",
 				"-ac", "2", "-cq", fmt.Sprintf("%d", *qval), dualMp4,
 			}
 			if *verbose {
 				log.Printf("DEBUG : exec = %s, args = %#v", ffmpeg, args)
 			}
-			exec.Command(ffmpeg, args...).Run()
+			err = exec.Command(ffmpeg, args...).Run()
+			if err != nil {
+				log.Printf("ERROR : %s", err.Error())
+			}
 		}
 		// Add to list of _dual.mp4 files
 		frontFiles = append(frontFiles, frontMp4)

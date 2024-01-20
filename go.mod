@@ -1,3 +1,3 @@
 module github.com/dayvillefire/rosco-dvxc-merge
 
-go 1.17
+go 1.21
